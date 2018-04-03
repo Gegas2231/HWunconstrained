@@ -45,10 +45,6 @@ module HWunconstrained
 
 	# gradient of the likelihood at x
 	function grad!(storage::Vector,betas::Vector,d)
-		xbeta     = d["X"]*betas	# (n,1)
-		G_xbeta   = cdf.(d["dist"],xbeta)	# (n,1)
-		g_xbeta   = pdf.(d["dist"],xbeta)	# (n,1)
-		storage[:]= -mean((d["y"] .* g_xbeta ./ G_xbeta - (1-d["y"]) .* g_xbeta ./ (1-G_xbeta)) .* d["X"],1)
 		return nothing
 	end
 
@@ -76,20 +72,14 @@ module HWunconstrained
 	standard errors
 	"""
 	function se(betas::Vector,d::Dict)
-		# sqrt.(diag(inv_observedInfo(betas,d)))
-		sqrt.(diag(inv_Info(betas,d)))
 	end
 
 	# function that maximizes the log likelihood without the gradient
 	# with a call to `optimize` and returns the result
 	function maximize_like(x0=[0.8,1.0,-0.1],meth=NelderMead())
-		d = makeData(10000)
-		res = optimize(arg->loglik(arg,d),x0,meth, Optim.Options(iterations = 500,g_tol=1e-20))
 		return res
 	end
 	function maximize_like_helpNM(x0=[ 1; 1.5; -0.5 ],meth=NelderMead())
-		d = makeData(10000)
-		res = optimize(arg->loglik(arg,d),x0,meth, Optim.Options(iterations = 500,g_tol=1e-20))
 		return res
 	end
 
