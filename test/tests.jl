@@ -4,19 +4,19 @@
 @testset "basics" begin
 
 	@testset "Test Data Construction" begin
-		@test size(HWunconstrained.makedata()["X"]) == (10000, 3)
-		@test size(HWunconstrained.makedata()["y"]) == (10000, 1)
+		@test size(HWunconstrained.makeData()["X"]) == (10000, 3)
+		@test size(HWunconstrained.makeData()["y"]) == (10000, 1)
 
-		#@test any(1, HWunconstrained.makedata()["y"])
+		#@test any(1, HWunconstrained.makeData()["y"])
 	end
 
 	@testset "Test Return value of likelihood" begin
 		#Negative loglikelihood function
-		@test HWunconstrained.loglik(HWunconstrained.makedata()["beta"], HWunconstrained.makedata()) < 0
+		@test HWunconstrained.loglik(HWunconstrained.makeData()["beta"], HWunconstrained.makeData()) < 0
 		#Loglikelihood is higher at the optimal beta
-		@test HWunconstrained.loglik(HWunconstrained.makedata()["beta"], HWunconstrained.makedata()) > HWunconstrained.loglik([1,1,1], HWunconstrained.makedata())
-		@test HWunconstrained.loglik(HWunconstrained.makedata()["beta"], HWunconstrained.makedata()) > HWunconstrained.loglik([1.5,1.5,1.5], HWunconstrained.makedata())
-		@test HWunconstrained.loglik(HWunconstrained.makedata()["beta"], HWunconstrained.makedata()) > HWunconstrained.loglik([-0.5,-0.5,-0.5], HWunconstrained.makedata())
+		@test HWunconstrained.loglik(HWunconstrained.makeData()["beta"], HWunconstrained.makeData()) > HWunconstrained.loglik([1,1,1], HWunconstrained.makeData())
+		@test HWunconstrained.loglik(HWunconstrained.makeData()["beta"], HWunconstrained.makeData()) > HWunconstrained.loglik([1.5,1.5,1.5], HWunconstrained.makeData())
+		@test HWunconstrained.loglik(HWunconstrained.makeData()["beta"], HWunconstrained.makeData()) > HWunconstrained.loglik([-0.5,-0.5,-0.5], HWunconstrained.makeData())
 	end
 
 	#@testset "Test return value of gradient" begin
@@ -40,7 +40,7 @@ end
 #
 	@testset "gradient is close to zero at max like estimate" begin
 		gradient = Vector(3)
-		HWunconstrained.grad!(gradient, HWunconstrained.maximize_like_grad().minimizer, HWunconstrained.makedata())
+		HWunconstrained.grad!(gradient, HWunconstrained.maximize_like_grad().minimizer, HWunconstrained.makeData())
 		@test gradient[1] ≈ 0 atol = 1.0e-5
 		@test gradient[2] ≈ 0 atol = 1.0e-5
 		@test gradient[3] ≈ 0 atol = 1.0e-5
